@@ -1,9 +1,19 @@
-import { Box, ClickAwayListener, Menu, MenuItem } from "@mui/material";
+import {
+  Box,
+  ClickAwayListener,
+  Typography,
+  Popover,
+  OutlinedInput,
+} from "@mui/material";
 import { useState } from "react";
+import { FaSearch } from "react-icons/fa";
 import { HiPlus } from "react-icons/hi";
 import { Handle, HandleProps } from "reactflow";
+import { renderIcon } from "./NodesHousing";
+import { nodeTypes } from "../nodes";
 
 export default function CustomHandle(props: HandleProps) {
+  const [search, setSearch] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -29,26 +39,62 @@ export default function CustomHandle(props: HandleProps) {
             right: "-16px",
           }}
           className="flex justify-center items-center"
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
           {...props}
         >
           <HiPlus size={24} color="#fff" />
         </Handle>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
+        <Popover
           open={open}
+          anchorEl={anchorEl}
           onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-select",
+          anchorOrigin={{
+            vertical: "center",
+            horizontal: "right",
           }}
+          transformOrigin={{
+            vertical: "center",
+            horizontal: "left",
+          }}
+          className="ml-4"
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
-        </Menu>
+          <Box className="p-4 bg-[#1F2937]">
+            <Typography variant="h6" className="text-white pb-2">
+              Type to search
+            </Typography>
+            <OutlinedInput
+              onChange={(event) => setSearch(event.target.value)}
+              className="w-full bg-white h-[48px]"
+              placeholder="Search"
+              endAdornment={<FaSearch size={20} />}
+            />
+            <div className="py-4">
+              <Typography variant="h6" className="text-white pb-2">
+                Most used
+              </Typography>
+              {Object.keys(nodeTypes)
+                .filter(
+                  (itemKey) =>
+                    itemKey
+                      .toLocaleLowerCase()
+                      .includes(search.toLowerCase()) &&
+                    itemKey.toLocaleLowerCase() !== "start"
+                )
+                .map((nodeType) => (
+                  <div
+                    key={nodeType}
+                    className="mt-1 px-2 py-3 flex items-center justify-between hover:bg-gray-700 gap-4 w-full hover:shadow-md transition-all duration-300 cursor-grab"
+                  >
+                    <div className="flex items-center gap-4 w-full">
+                      {renderIcon[nodeType]}
+                      <h6 className="text-white text-lg capitalize">
+                        {nodeType}
+                      </h6>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </Box>
+        </Popover>
       </Box>
     </ClickAwayListener>
   );

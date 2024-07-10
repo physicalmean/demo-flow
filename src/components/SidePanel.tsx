@@ -12,11 +12,8 @@ import {
   styled,
   IconButton,
   Divider,
-  FormControl,
   Typography,
-  InputAdornment,
-  InputLabel,
-  FilledInput,
+  OutlinedInput,
 } from "@mui/material";
 import { IoClose } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
@@ -75,17 +72,12 @@ This will get triggered on change of viewport selection,
         <Typography variant="h6" className="pb-2">
           Type of search
         </Typography>
-        <FormControl variant="filled" fullWidth>
-          <InputLabel htmlFor="filled-adornment-password">Search</InputLabel>
-          <FilledInput
-            onChange={(event) => setSearch(event.target.value)}
-            endAdornment={
-              <InputAdornment position="end">
-                <FaSearch size={20} />
-              </InputAdornment>
-            }
-          />
-        </FormControl>
+        <OutlinedInput
+          onChange={(event) => setSearch(event.target.value)}
+          className="w-full bg-white"
+          placeholder="Search"
+          endAdornment={<FaSearch size={20} />}
+        />
         <div className="py-4">
           <Typography variant="h6" className="pb-2">
             Most used

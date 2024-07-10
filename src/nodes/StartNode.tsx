@@ -10,7 +10,7 @@ export type startNodeType = {
 
 export default function StartNode() {
   return (
-    <div className="border text-card-foreground flex flex-col rounded-md shadow-md bg-white min-w-64 max-w-72 relative hover:ring-4 hover:ring-sky-500 ring-4 ring-sky-500">
+    <div className="border text-card-foreground flex flex-col rounded-md shadow-md bg-white min-w-64 max-w-72 relative hover:ring-4 hover:ring-sky-500">
       <div className="p-6 pt-0 pb-0 px-0">
         <div className="flex items-center py-3 gap-8 px-3">
           <FaRegFlag size={24} />

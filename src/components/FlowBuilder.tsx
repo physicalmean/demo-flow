@@ -10,6 +10,7 @@ import {
   OnConnect,
   useReactFlow,
   Node,
+  BackgroundVariant,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -60,7 +61,7 @@ export default function FlowBuilder() {
     event.preventDefault();
 
     const type = event.dataTransfer.getData("application/reactflow");
-    if (typeof type === "undefined" || !type || type !== "message") {
+    if (!type || !["message", "buttons", "card"].includes(type)) {
       return;
     }
     const position = reactFlow.screenToFlowPosition({
@@ -134,7 +135,11 @@ export default function FlowBuilder() {
             onDragOver={onDragOver}
             fitView
           >
-            <Background />
+            <Background
+              color="gray"
+              gap={50}
+              variant={BackgroundVariant.Lines}
+            />
             {/* <MiniMap /> */}
             <Controls />
           </ReactFlow>
@@ -147,6 +152,7 @@ export default function FlowBuilder() {
 const ContainerReactFlow = styled("div")({
   height: "calc(100vh - 65px)",
   position: "relative",
+  backgroundColor: "#454b6b",
 });
 
 const ButtonAdd = styled(IconButton)(({ theme }) => ({
