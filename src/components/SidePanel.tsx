@@ -1,12 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NodesHousing from "./NodesHousing";
-import NodeEditor, { ActiveNodeProps } from "./NodeEditor";
-import {
-  Viewport,
-  useOnSelectionChange,
-  useOnViewportChange,
-  useReactFlow,
-} from "reactflow";
+import { ActiveNodeProps } from "./NodeEditor";
+import { Viewport, useOnSelectionChange, useOnViewportChange } from "reactflow";
 import { isValidUniqueSelection } from "../util";
 import {
   styled,
@@ -18,12 +13,7 @@ import {
 import { IoClose } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 
-export default function SidePanel({
-  activeNode,
-  setActiveNode,
-  onClose,
-}: ActiveNodeProps) {
-  const reactFlow = useReactFlow();
+export default function SidePanel({ setActiveNode, onClose }: ActiveNodeProps) {
   const [search, setSearch] = useState("");
 
   // This will get triggered on selection change of item (node, edge) on the viewport
@@ -48,18 +38,6 @@ This will get triggered on change of viewport selection,
     },
   });
 
-  // Update the node in the react flow
-  useEffect(() => {
-    reactFlow.setNodes((nodes) => {
-      return nodes.map((node) => {
-        if (node.id === activeNode?.id) {
-          return activeNode;
-        }
-        return node;
-      });
-    });
-  }, [activeNode]);
-
   return (
     <Container className="bg-[#eef0f7] border rounded-md transition-['width'] duration-300 h-screen flex flex-col pb-6 z-30 w-[500px] opacity-100">
       <div className="flex justify-end items-center px-4 py-3">
@@ -70,7 +48,7 @@ This will get triggered on change of viewport selection,
       <Divider />
       <div className="py-6 px-4">
         <Typography variant="h6" className="pb-2">
-          Type of search
+          Type to search
         </Typography>
         <OutlinedInput
           onChange={(event) => setSearch(event.target.value)}
@@ -82,11 +60,7 @@ This will get triggered on change of viewport selection,
           <Typography variant="h6" className="pb-2">
             Most used
           </Typography>
-          {activeNode ? (
-            <NodeEditor activeNode={activeNode} setActiveNode={setActiveNode} />
-          ) : (
-            <NodesHousing search={search} />
-          )}
+          <NodesHousing search={search} />
         </div>
       </div>
     </Container>

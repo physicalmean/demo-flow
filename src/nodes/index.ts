@@ -8,7 +8,7 @@ export const initialNodes: (messageNodeType | startNodeType)[] = [
     id: "1",
     type: "start",
     position: { x: 0, y: 300 },
-    data: {},
+    data: [],
   },
 ] satisfies Node[];
 

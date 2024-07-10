@@ -16,13 +16,13 @@ import {
 import "reactflow/dist/style.css";
 
 import { initialNodes, nodeTypes } from "../nodes";
-import { initialEdges } from "../edges";
-import { getNewNodeId, validateFlow, isDuplicateEdgeStart } from "../util";
+import { edgeTypes, initialEdges } from "../edges";
+import { getNewNodeId, isDuplicateEdgeStart } from "../util";
 
 import SidePanel from "./SidePanel";
-import { toast } from "sonner";
 import { Button, IconButton, styled, Typography } from "@mui/material";
 import { HiPlus } from "react-icons/hi";
+import LiveChat from "./LiveChat";
 
 export default function FlowBuilder() {
   const reactFlow = useReactFlow();
@@ -31,7 +31,7 @@ export default function FlowBuilder() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes as []);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [activeNode, setActiveNode] = useState<Node | null>(null);
-
+  const [showTestChat, setShowTestChat] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
 
   // validate & Handle connections between nodes
@@ -61,9 +61,7 @@ export default function FlowBuilder() {
     event.preventDefault();
 
     const type = event.dataTransfer.getData("application/reactflow");
-    if (!type || !["message", "buttons", "card"].includes(type)) {
-      return;
-    }
+    if (!type || !Object.keys(nodeTypes).includes(type)) return;
     const position = reactFlow.screenToFlowPosition({
       x: event.clientX,
       y: event.clientY,
@@ -74,42 +72,25 @@ export default function FlowBuilder() {
       id: getNewNodeId(nodes),
       type,
       position,
-      data: { message: `` },
+      data: [{ message: `` }],
     };
 
     setNodes((nodes) => nodes.concat(newNode));
-    // update active node
     setActiveNode(newNode);
   };
 
-  // Save flow handler
-  const saveFlow = () => {
-    const isFlowValid = validateFlow(nodes, edges);
-    if (!isFlowValid) {
-      toast.error("Cannot save flow");
-      return;
-    }
-
-    // save flow
-    console.log("flow_state", {
-      nodes,
-      edges,
-    });
-    toast.success("Flow saved");
-  };
-
   return (
-    <section>
+    <section className="h-screen overflow-hidden">
       <nav className="flex justify-between items-center bg-white px-40 py-3 shadow-md">
         <Typography variant="h5" className="font-bold">
           New Bot
         </Typography>
-        <Button variant="outlined" onClick={saveFlow}>
+        <Button variant="outlined" onClick={() => setShowTestChat(true)}>
           Test this bot
         </Button>
       </nav>
 
-      <main className="flow-container flex w-full">
+      <main className="flow-container flex w-full relative">
         {/* Side Panel */}
         {openDrawer && (
           <SidePanel
@@ -128,6 +109,7 @@ export default function FlowBuilder() {
             nodes={nodes}
             edges={edges}
             nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
@@ -143,6 +125,7 @@ export default function FlowBuilder() {
             {/* <MiniMap /> */}
             <Controls />
           </ReactFlow>
+          {showTestChat && <LiveChat onClose={() => setShowTestChat(false)} />}
         </ContainerReactFlow>
       </main>
     </section>

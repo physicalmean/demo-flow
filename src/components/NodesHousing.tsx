@@ -13,9 +13,6 @@ export const renderIcon: any = {
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
         className="lucide lucide-message-circle text-gray-500 size-4"
       >
         <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
@@ -52,9 +49,6 @@ export const renderIcon: any = {
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
         className="lucide lucide-diamond text-gray-500 size-4"
       >
         <path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"></path>

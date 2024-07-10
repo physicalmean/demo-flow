@@ -8,11 +8,14 @@ import {
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { HiPlus } from "react-icons/hi";
-import { Handle, HandleProps } from "reactflow";
+import { Edge, Handle, HandleProps, Node, useReactFlow } from "reactflow";
 import { renderIcon } from "./NodesHousing";
 import { nodeTypes } from "../nodes";
+import { getNewNodeId } from "../util";
 
 export default function CustomHandle(props: HandleProps) {
+  const reactFlow = useReactFlow();
+
   const [search, setSearch] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -25,6 +28,36 @@ export default function CustomHandle(props: HandleProps) {
     setAnchorEl(null);
   };
 
+  const onSelectNodeType = (type: string) => {
+    if (props.id) {
+      const selectNode = reactFlow.getNode(props.id);
+
+      const position = reactFlow.screenToFlowPosition({
+        x: (selectNode?.position.x || 0) + 800,
+        y: (selectNode?.position.y || 0) + 60,
+      });
+
+      // create a new node with the type and position
+      const newNodeId = getNewNodeId(reactFlow.getNodes());
+      const newNode: Node = {
+        id: newNodeId,
+        type,
+        position,
+        data: [{ message: `` }],
+      };
+      reactFlow.setNodes((nodes) => nodes.concat(newNode));
+
+      const edge: Edge = {
+        id: `${props.id}-${newNodeId}`,
+        source: props.id,
+        target: newNodeId,
+        type: "default",
+      };
+      reactFlow.addEdges(edge);
+    }
+  };
+
+  console.log(reactFlow.getEdges());
   return (
     <ClickAwayListener onClickAway={handleClose}>
       <Box>
@@ -82,6 +115,7 @@ export default function CustomHandle(props: HandleProps) {
                 .map((nodeType) => (
                   <div
                     key={nodeType}
+                    onClick={() => onSelectNodeType(nodeType)}
                     className="mt-1 px-2 py-3 flex items-center justify-between hover:bg-gray-700 gap-4 w-full hover:shadow-md transition-all duration-300 cursor-grab"
                   >
                     <div className="flex items-center gap-4 w-full">
