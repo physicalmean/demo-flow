@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Node, useReactFlow } from "reactflow";
+import { useEffect, useRef } from "react";
+import { Node } from "reactflow";
 
 export type ActiveNodeProps = {
   activeNode: Node | null;
@@ -29,32 +29,32 @@ export default function NodeEditor({
   );
 }
 
-function MessageEditor({ activeNode, setActiveNode }: ActiveNodeProps) {
-  const [message, setMessage] = useState<string>(activeNode?.data.message);
+function MessageEditor({ activeNode }: ActiveNodeProps) {
+  // const [message, setMessage] = useState<string>(activeNode?.data.message);
   const inputMessageRef = useRef<HTMLTextAreaElement>(null);
-  const reactFlow = useReactFlow();
+  // const reactFlow = useReactFlow();
 
   // update activeNode on change of message
-  const handleActiveNodeChange = (message: string) => {
-    if (!activeNode) {
-      return;
-    }
-    const latestNodeInstance = reactFlow.getNode(activeNode.id);
-    const updatedNodeObj = {
-      ...latestNodeInstance,
-      data: {
-        ...latestNodeInstance?.data,
-        message,
-      },
-    };
-    // @ts-expect-error-next-line
-    setActiveNode(updatedNodeObj);
-  };
+  // const handleActiveNodeChange = (message: string) => {
+  //   if (!activeNode) {
+  //     return;
+  //   }
+  //   const latestNodeInstance = reactFlow.getNode(activeNode.id);
+  //   const updatedNodeObj = {
+  //     ...latestNodeInstance,
+  //     data: {
+  //       ...latestNodeInstance?.data,
+  //       message,
+  //     },
+  //   };
+  //   // @ts-expect-error-next-line
+  //   setActiveNode(updatedNodeObj);
+  // };
 
-  useEffect(() => {
-    // update the message on change of activeNode
-    setMessage(activeNode?.data.message);
-  }, [activeNode?.data.message]);
+  // useEffect(() => {
+  //   // update the message on change of activeNode
+  //   setMessage(activeNode?.data.message);
+  // }, [activeNode?.data.message]);
 
   useEffect(() => {
     if (inputMessageRef.current) {
