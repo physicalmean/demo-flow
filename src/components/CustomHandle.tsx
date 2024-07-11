@@ -62,8 +62,8 @@ export default function CustomHandle(props: HandleProps) {
         target: newNodeId,
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          width: 20,
-          height: 20,
+          width: 16,
+          height: 16,
           color: "gray",
         },
         style: {

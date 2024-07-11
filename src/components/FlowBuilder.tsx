@@ -48,8 +48,8 @@ export default function FlowBuilder() {
       ...connection,
       markerEnd: {
         type: MarkerType.ArrowClosed,
-        width: 20,
-        height: 20,
+        width: 16,
+        height: 16,
         color: "gray",
       },
       style: {
