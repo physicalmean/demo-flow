@@ -12,6 +12,7 @@ import {
   Node,
   BackgroundVariant,
   MarkerType,
+  NodeMouseHandler,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -24,6 +25,7 @@ import SidePanel from "./SidePanel";
 import { Button, IconButton, styled, Typography } from "@mui/material";
 import { HiPlus } from "react-icons/hi";
 import LiveChat from "./LiveChat";
+import RightPanel from "./RightPanel";
 
 export default function FlowBuilder() {
   const reactFlow = useReactFlow();
@@ -78,16 +80,36 @@ export default function FlowBuilder() {
       y: event.clientY,
     });
 
+    let dataNode: any = [{ message: "", image: "" }];
+    if (type === "buttons") {
+      dataNode = {
+        message: "",
+        buttons: [],
+      };
+    } else if (type === "card") {
+      dataNode = {
+        image: "",
+        title: "",
+        description: "",
+        buttons: [],
+      };
+    }
     // create a new node with the type and position
     const newNode: Node = {
       id: getNewNodeId(nodes),
       type,
       position,
-      data: [{ message: `` }],
+      data: dataNode,
     };
 
     setNodes((nodes) => nodes.concat(newNode));
   };
+
+  const onSelectNode: NodeMouseHandler = useCallback((_, node) => {
+    if (node.type !== "start") {
+      setActiveNode(node);
+    }
+  }, []);
 
   return (
     <section className="h-screen overflow-hidden">
@@ -95,7 +117,13 @@ export default function FlowBuilder() {
         <Typography variant="h5" className="font-bold">
           New Bot
         </Typography>
-        <Button variant="outlined" onClick={() => setShowTestChat(true)}>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setActiveNode(null);
+            setShowTestChat(true);
+          }}
+        >
           Test this bot
         </Button>
       </nav>
@@ -119,7 +147,9 @@ export default function FlowBuilder() {
             onConnect={onConnect}
             onDrop={onDrop}
             onDragOver={onDragOver}
+            onNodeClick={onSelectNode}
             fitView
+            maxZoom={1}
           >
             <Background
               color="gray"
@@ -129,7 +159,17 @@ export default function FlowBuilder() {
             {/* <MiniMap /> */}
             <Controls />
           </ReactFlow>
-          {showTestChat && <LiveChat onClose={() => setShowTestChat(false)} />}
+          {activeNode && (
+            <RightPanel activeNode={activeNode} setActiveNode={setActiveNode} />
+          )}
+          {showTestChat && (
+            <LiveChat
+              onClose={() => {
+                setActiveNode(null);
+                setShowTestChat(false);
+              }}
+            />
+          )}
         </ContainerReactFlow>
       </main>
     </section>

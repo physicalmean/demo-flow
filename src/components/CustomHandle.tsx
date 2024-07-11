@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Box,
   ClickAwayListener,
@@ -30,6 +31,7 @@ export default function CustomHandle(props: HandleProps) {
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 
@@ -40,19 +42,31 @@ export default function CustomHandle(props: HandleProps) {
   const onSelectNodeType = (type: string) => {
     if (props.id) {
       const selectNode = reactFlow.getNode(props.id);
-
-      const position = reactFlow.screenToFlowPosition({
-        x: (selectNode?.position.x || 0) + 800,
-        y: (selectNode?.position.y || 0) + 60,
-      });
-
+      if (!selectNode) return;
       // create a new node with the type and position
       const newNodeId = getNewNodeId(reactFlow.getNodes());
+      let dataNode: any = [{ message: "", image: "" }];
+      if (type === "buttons") {
+        dataNode = {
+          message: "",
+          buttons: [],
+        };
+      } else if (type === "card") {
+        dataNode = {
+          image: "",
+          title: "",
+          description: "",
+          buttons: [],
+        };
+      }
       const newNode: Node = {
         id: newNodeId,
         type,
-        position,
-        data: [{ message: `` }],
+        position: {
+          x: selectNode.position.x + (selectNode.width || 0) + 100,
+          y: selectNode.position.y,
+        },
+        data: dataNode,
       };
       reactFlow.setNodes((nodes) => nodes.concat(newNode));
 

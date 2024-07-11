@@ -5,8 +5,8 @@ import CustomHandle from "../components/CustomHandle";
 import { getNewNodeId } from "../util";
 import { ButtonBaseType } from "./ButtonNode";
 
-type CardNodeProps = {
-  image?: MediaImage;
+export type CardNodeProps = {
+  image?: string;
   title?: string;
   description?: string;
   buttons?: ButtonBaseType[];
@@ -58,6 +58,7 @@ export default function CardNode({
   };
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 
@@ -104,14 +105,14 @@ export default function CardNode({
             anchorEl={anchorEl}
             onClose={handleClose}
             anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
+              vertical: "center",
+              horizontal: "right",
             }}
             transformOrigin={{
-              vertical: "top",
-              horizontal: "center",
+              vertical: "center",
+              horizontal: "left",
             }}
-            className="ml-2"
+            className="ml-4"
           >
             <Box className="flex flex-col bg-white">
               <button
@@ -125,9 +126,6 @@ export default function CardNode({
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
                   className="lucide lucide-copy size-5"
                 >
                   <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
@@ -146,9 +144,6 @@ export default function CardNode({
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
                   className="lucide lucide-trash2 size-5"
                 >
                   <path d="M3 6h18"></path>
