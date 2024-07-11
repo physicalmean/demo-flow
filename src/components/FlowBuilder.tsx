@@ -50,12 +50,11 @@ export default function FlowBuilder() {
         type: MarkerType.ArrowClosed,
         width: 20,
         height: 20,
-        color: "#FF0072",
+        color: "gray",
       },
-      label: "marker size and color",
       style: {
         strokeWidth: 2,
-        stroke: "#FF0072",
+        stroke: "rgb(144 97 249)",
       },
     };
     setEdges((edges) => addEdge(edge, edges));

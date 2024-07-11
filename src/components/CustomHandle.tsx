@@ -75,7 +75,6 @@ export default function CustomHandle(props: HandleProps) {
     }
   };
 
-  console.log(reactFlow.getEdges());
   return (
     <ClickAwayListener onClickAway={handleClose}>
       <Box>
