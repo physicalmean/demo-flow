@@ -1,8 +1,3 @@
-import type { Edge, EdgeTypes } from "reactflow";
-import CustomEdge from "./CustomEdge";
+import type { Edge } from "reactflow";
 
 export const initialEdges = [] satisfies Edge[];
-
-export const edgeTypes: EdgeTypes = {
-  default: CustomEdge,
-};

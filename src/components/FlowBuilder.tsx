@@ -11,12 +11,13 @@ import {
   useReactFlow,
   Node,
   BackgroundVariant,
+  MarkerType,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
 
 import { initialNodes, nodeTypes } from "../nodes";
-import { edgeTypes, initialEdges } from "../edges";
+import { initialEdges } from "../edges";
 import { getNewNodeId, isDuplicateEdgeStart } from "../util";
 
 import SidePanel from "./SidePanel";
@@ -45,6 +46,17 @@ export default function FlowBuilder() {
     const edge = {
       id: `${connection.source}-${connection.target}`,
       ...connection,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        width: 20,
+        height: 20,
+        color: "#FF0072",
+      },
+      label: "marker size and color",
+      style: {
+        strokeWidth: 2,
+        stroke: "#FF0072",
+      },
     };
     setEdges((edges) => addEdge(edge, edges));
   };
@@ -76,7 +88,6 @@ export default function FlowBuilder() {
     };
 
     setNodes((nodes) => nodes.concat(newNode));
-    setActiveNode(newNode);
   };
 
   return (
@@ -92,13 +103,7 @@ export default function FlowBuilder() {
 
       <main className="flow-container flex w-full relative">
         {/* Side Panel */}
-        {openDrawer && (
-          <SidePanel
-            activeNode={activeNode}
-            setActiveNode={setActiveNode}
-            onClose={() => setOpenDrawer(false)}
-          />
-        )}
+        {openDrawer && <SidePanel onClose={() => setOpenDrawer(false)} />}
         <ContainerReactFlow
           sx={{ width: openDrawer ? "calc(100vw - 500px)" : "100vw" }}
         >
@@ -109,7 +114,7 @@ export default function FlowBuilder() {
             nodes={nodes}
             edges={edges}
             nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
+            // edgeTypes={edgeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}

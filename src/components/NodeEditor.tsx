@@ -4,7 +4,6 @@ import { Node, useReactFlow } from "reactflow";
 export type ActiveNodeProps = {
   activeNode: Node | null;
   setActiveNode: React.Dispatch<React.SetStateAction<Node | null>>;
-  onClose?: () => void;
 };
 
 /* This component will be used to edit the properties of the selected node
@@ -49,7 +48,7 @@ function MessageEditor({ activeNode, setActiveNode }: ActiveNodeProps) {
         message,
       },
     };
-    // @ts-ignore-next-line
+    // @ts-expect-error-next-line
     setActiveNode(updatedNodeObj);
   };
 

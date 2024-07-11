@@ -1,33 +1,31 @@
 import { useState } from "react";
-import {
-  NodeProps,
-  Position,
-  useReactFlow,
-  Node,
-  MarkerType,
-  Edge,
-} from "reactflow";
+import { NodeProps, Position, useReactFlow, Node } from "reactflow";
 import { Box, Popover } from "@mui/material";
 import CustomHandle from "../components/CustomHandle";
 import { getNewNodeId } from "../util";
 
-type MessageNodeProps = {
-  message?: string;
-  image?: MediaImage;
+export type ButtonBaseType = {
+  targetId?: string;
+  content?: string;
 };
 
-export type messageNodeType = {
+type ButtonNodeProps = {
+  message?: string;
+  buttons?: ButtonBaseType[];
+};
+
+export type buttonNodeType = {
   id: string;
   type: string;
   position: { x: number; y: number };
-  data: MessageNodeProps[];
+  data: ButtonNodeProps;
 };
 
-export default function MessageNode({
+export default function ButtonNode({
   id,
   type,
   data,
-}: NodeProps<MessageNodeProps[]>) {
+}: NodeProps<ButtonNodeProps>) {
   const reactFlow = useReactFlow();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -47,25 +45,9 @@ export default function MessageNode({
         id: newNodeId,
         type,
         position,
-        data: selectNode?.data || [],
+        data: selectNode?.data || {},
       };
       reactFlow.setNodes((nodes) => nodes.concat(newNode));
-      const edge: Edge = {
-        id: `${id}-${newNodeId}`,
-        source: id,
-        target: newNodeId,
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          width: 20,
-          height: 20,
-          color: "#FF0072",
-        },
-        style: {
-          strokeWidth: 2,
-          stroke: "#FF0072",
-        },
-      };
-      reactFlow.setEdges((edges) => edges.concat([edge]));
       handleClose();
     }
   };
@@ -90,18 +72,24 @@ export default function MessageNode({
       <div className="p-6 pt-0 pb-0 px-0">
         <div className="flex items-center py-3 gap-8 px-3 justify-around">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
             fill="none"
-            stroke="currentColor"
-            className="lucide lucide-message-circle size-6"
+            xmlns="http://www.w3.org/2000/svg"
+            className="text-gray-500 size-4"
           >
-            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+            <path
+              d="M40 35.5556C40 38.01 38.01 40 35.5556 40H4.44444C1.99 40 0 38.01 0 35.5556V4.44444C0 1.99 1.99 0 4.44444 0H35.5556C38.01 0 40 1.99 40 4.44444V35.5556Z"
+              fill="#3B88C3"
+            ></path>
+            <path
+              d="M20.0001 32.2223C26.7502 32.2223 32.2223 26.7502 32.2223 20.0001C32.2223 13.2499 26.7502 7.77783 20.0001 7.77783C13.2499 7.77783 7.77783 13.2499 7.77783 20.0001C7.77783 26.7502 13.2499 32.2223 20.0001 32.2223Z"
+              fill="white"
+            ></path>
           </svg>
           <div className="flex flex-col">
-            <h3 className="text-lg text-gray-900 font-bold">Message</h3>
+            <h3 className="text-lg text-gray-900 font-bold">Buttons</h3>
           </div>
           <div onClick={handleClick}>
             <svg
@@ -182,12 +170,10 @@ export default function MessageNode({
           </Popover>
         </div>
         <div className="w-full">
-          <div className="flex flex-col items-center justify-center gap-2 bg-gray-200 py-3 px-2">
-            {data.map((item, index) => (
-              <div key={index} className="bg-white w-full  p-3 rounded-md">
-                <h3>{item.message || "Click to edit"}</h3>
-              </div>
-            ))}
+          <div className="flex flex-col items-center justify-center gap-2 bg-gray-200 py-3 px-2  ">
+            <div className="bg-white w-full  p-3 rounded-md">
+              <h3>{data.message || "Click to edit"}</h3>
+            </div>
           </div>
         </div>
       </div>

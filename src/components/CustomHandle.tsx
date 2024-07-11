@@ -8,7 +8,16 @@ import {
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { HiPlus } from "react-icons/hi";
-import { Edge, Handle, HandleProps, Node, useReactFlow } from "reactflow";
+import {
+  addEdge,
+  Edge,
+  Handle,
+  HandleProps,
+  MarkerType,
+  Node,
+  Position,
+  useReactFlow,
+} from "reactflow";
 import { renderIcon } from "./NodesHousing";
 import { nodeTypes } from "../nodes";
 import { getNewNodeId } from "../util";
@@ -51,9 +60,18 @@ export default function CustomHandle(props: HandleProps) {
         id: `${props.id}-${newNodeId}`,
         source: props.id,
         target: newNodeId,
-        type: "default",
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 20,
+          height: 20,
+          color: "gray",
+        },
+        style: {
+          strokeWidth: 2,
+          stroke: "rgb(144 97 249)",
+        },
       };
-      reactFlow.addEdges(edge);
+      reactFlow.setEdges((edges) => addEdge(edge, edges));
     }
   };
 
@@ -62,19 +80,21 @@ export default function CustomHandle(props: HandleProps) {
     <ClickAwayListener onClickAway={handleClose}>
       <Box>
         <Handle
-          id="basic-select"
+          id="output-edge"
           onClick={handleClick}
           style={{
-            width: 32,
-            height: 32,
-            background: "#1976D2",
+            width: 20,
+            height: 20,
+            background: "rgb(144 97 249)",
             position: "absolute",
-            right: "-16px",
+            border: "unset",
+            right: props.position === Position.Left ? "unset" : "-11px",
+            left: props.position === Position.Left ? "-11px" : "unset",
           }}
           className="flex justify-center items-center"
           {...props}
         >
-          <HiPlus size={24} color="#fff" />
+          <HiPlus size={16} color="#fff" />
         </Handle>
         <Popover
           open={open}

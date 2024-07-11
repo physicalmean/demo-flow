@@ -1,33 +1,29 @@
 import { useState } from "react";
-import {
-  NodeProps,
-  Position,
-  useReactFlow,
-  Node,
-  MarkerType,
-  Edge,
-} from "reactflow";
+import { NodeProps, Position, useReactFlow, Node } from "reactflow";
 import { Box, Popover } from "@mui/material";
 import CustomHandle from "../components/CustomHandle";
 import { getNewNodeId } from "../util";
+import { ButtonBaseType } from "./ButtonNode";
 
-type MessageNodeProps = {
-  message?: string;
+type CardNodeProps = {
   image?: MediaImage;
+  title?: string;
+  description?: string;
+  buttons?: ButtonBaseType[];
 };
 
-export type messageNodeType = {
+export type cardNodeType = {
   id: string;
   type: string;
   position: { x: number; y: number };
-  data: MessageNodeProps[];
+  data: CardNodeProps[];
 };
 
-export default function MessageNode({
+export default function CardNode({
   id,
   type,
   data,
-}: NodeProps<MessageNodeProps[]>) {
+}: NodeProps<CardNodeProps[]>) {
   const reactFlow = useReactFlow();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -50,22 +46,6 @@ export default function MessageNode({
         data: selectNode?.data || [],
       };
       reactFlow.setNodes((nodes) => nodes.concat(newNode));
-      const edge: Edge = {
-        id: `${id}-${newNodeId}`,
-        source: id,
-        target: newNodeId,
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          width: 20,
-          height: 20,
-          color: "#FF0072",
-        },
-        style: {
-          strokeWidth: 2,
-          stroke: "#FF0072",
-        },
-      };
-      reactFlow.setEdges((edges) => edges.concat([edge]));
       handleClose();
     }
   };
@@ -96,12 +76,12 @@ export default function MessageNode({
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            className="lucide lucide-message-circle size-6"
+            className="lucide lucide-diamond text-gray-500 size-4"
           >
-            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+            <path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"></path>
           </svg>
           <div className="flex flex-col">
-            <h3 className="text-lg text-gray-900 font-bold">Message</h3>
+            <h3 className="text-lg text-gray-900 font-bold">Card</h3>
           </div>
           <div onClick={handleClick}>
             <svg
@@ -118,6 +98,7 @@ export default function MessageNode({
               <circle cx="5" cy="12" r="1"></circle>
             </svg>
           </div>
+
           <Popover
             open={open}
             anchorEl={anchorEl}
@@ -182,12 +163,12 @@ export default function MessageNode({
           </Popover>
         </div>
         <div className="w-full">
-          <div className="flex flex-col items-center justify-center gap-2 bg-gray-200 py-3 px-2">
-            {data.map((item, index) => (
-              <div key={index} className="bg-white w-full  p-3 rounded-md">
-                <h3>{item.message || "Click to edit"}</h3>
+          <div className="flex flex-col items-center justify-center gap-2 bg-gray-200 py-3 px-2  ">
+            {!data?.length && (
+              <div className="bg-white w-full  p-3 rounded-md">
+                <h3>Click to edit</h3>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
